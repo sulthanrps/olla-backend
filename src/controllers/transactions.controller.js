@@ -2,7 +2,7 @@ const { pool, query, sql } = require('../config/db');
 
 exports.getAllTransactions = async (req, res) => {
     try {
-        const result = await pool.query("SELECT t.id_transaction, t.hari, t.tanggal, c.nama as 'Customer Name', p.nama_product, p.harga, t.size, t.warna, t.jenis_transaksi, t.qty, (p.harga * t.qty) as 'Total Bayar', k.nama as 'Nama Kasir' FROM transactions t JOIN products p on t.id_product = p.id_product JOIN customers c on t.id_customer = c.id_customer JOIN kasir k on t.id_kasir = k.id_kasir;")
+        const result = await pool.query("SELECT t.id_transaction, t.hari, t.tanggal, c.nama as nama_customer, p.nama_product, p.harga, t.size, t.warna, t.jenis_transaksi, t.qty, (p.harga * t.qty) as total_harga, k.nama as nama_kasir FROM transactions t JOIN products p on t.id_product = p.id_product JOIN customers c on t.id_customer = c.id_customer JOIN kasir k on t.id_kasir = k.id_kasir;")
         res.status(200).json({
             status: 'success',
             count: result.recordset.length,
