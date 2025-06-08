@@ -52,13 +52,12 @@ exports.addStaff = async (req, res) => {
     }
 
     try {
-        // Hashing password sebelum disimpan
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const request = pool.request();
         request.input('username', sql.VarChar, username);
-        request.input('password', sql.VarChar, hashedPassword); // Simpan password yang sudah di-hash
+        request.input('password', sql.VarChar, hashedPassword); 
         request.input('nama', sql.VarChar, nama);
 
         await request.query('INSERT INTO kasir (username, password, nama) OUTPUT INSERTED.id_kasir VALUES (@username, @password, @nama)');
@@ -68,7 +67,6 @@ exports.addStaff = async (req, res) => {
             message: 'Staff berhasil dibuat',
         });
     } catch (error) {
-        // Error code 2627 adalah untuk unique constraint violation (username sudah ada)
         if (error.number === 2627) {
             return res.status(409).json({ status: 'fail', message: 'Username sudah digunakan.' });
         }
@@ -76,10 +74,6 @@ exports.addStaff = async (req, res) => {
     }
 };
 
-/**
- * @function updateStaff
- * @description Memperbarui data customer yang ada berdasarkan ID.
- */
 exports.updateStaff = async (req, res) => {
     const { id } = req.params;
     const { username, nama } = req.body;
@@ -100,7 +94,6 @@ exports.updateStaff = async (req, res) => {
         //     request.input('password', sql.VarChar, hashedPassword);
         // }
 
-        // Query dinamis untuk update, hanya update field yang ada
         const querySet = [];
         if (username) querySet.push('username = @username');
         if (nama) querySet.push('nama = @nama');
@@ -119,7 +112,6 @@ exports.updateStaff = async (req, res) => {
     }
 };
 
-// DELETE: Menghapus data staff
 exports.deleteStaff = async (req, res) => {
     const { id } = req.params;
     try {

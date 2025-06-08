@@ -10,9 +10,9 @@ const transactionRoutes = require('./routes/transactions.routes');
 const dashboardRoutes = require('./routes/dashboard.routes');
 
 const app = express();
-app.use(cors()); // Enable CORS for all routes
-app.use(express.json()); // Middleware to parse JSON request bodies
-app.use(express.urlencoded({ extended: true })); // Middleware to parse URL-encoded bodies
+app.use(cors());
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: true })); 
 
 app.get('/', (req, res) => {
     res.status(200).json({
@@ -20,24 +20,21 @@ app.get('/', (req, res) => {
         timestamp: new Date().toISOString(),
     })
 })
-app.use('/api/v1/auth', authRoutes); // Use authentication routes
-app.use('/api/v1/staff', staffRoutes); // Use staff routes
-app.use('/api/v1/customers', customersRoutes); // Use customers routes
-app.use('/api/v1/products', productsRoutes); // Use products routes
-app.use('/api/v1/transactions', transactionRoutes); // Use transactions routes
-app.use('/api/v1/dashboard', dashboardRoutes); // Use dashboard routes
+app.use('/api/v1/auth', authRoutes); 
+app.use('/api/v1/staff', staffRoutes); 
+app.use('/api/v1/customers', customersRoutes); 
+app.use('/api/v1/products', productsRoutes); 
+app.use('/api/v1/transactions', transactionRoutes); 
+app.use('/api/v1/dashboard', dashboardRoutes); 
 
 app.use((req, res, next) => {
     const error = new Error('Not Found: Rute tidak ditemukan');
     error.status = 404;
-    next(error); // Meneruskan error ke middleware penanganan error selanjutnya.
+    next(error); 
 });
 
 app.use((err, req, res, next) => {
-    // Mengatur status response dari error yang diberikan, atau default ke 500 (Internal Server Error)
     const statusCode = err.status || 500;
-    
-    // Mengirim respons error dalam format JSON yang konsisten
     res.status(statusCode).json({
         status: 'error',
         code: statusCode,
@@ -45,4 +42,4 @@ app.use((err, req, res, next) => {
     });
 });
 
-module.exports = app; // Ekspor app untuk digunakan di server.js
+module.exports = app; 
