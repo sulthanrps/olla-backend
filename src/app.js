@@ -7,6 +7,7 @@ const productsRoutes = require('./routes/products.routes');
 const staffRoutes = require('./routes/staff.routes');
 const authRoutes = require('./routes/auth.routes');
 const transactionRoutes = require('./routes/transactions.routes');
+const dashboardRoutes = require('./routes/dashboard.routes');
 
 const app = express();
 app.use(cors()); // Enable CORS for all routes
@@ -24,6 +25,7 @@ app.use('/api/v1/staff', staffRoutes); // Use staff routes
 app.use('/api/v1/customers', customersRoutes); // Use customers routes
 app.use('/api/v1/products', productsRoutes); // Use products routes
 app.use('/api/v1/transactions', transactionRoutes); // Use transactions routes
+app.use('/api/v1/dashboard', dashboardRoutes); // Use dashboard routes
 
 app.use((req, res, next) => {
     const error = new Error('Not Found: Rute tidak ditemukan');
