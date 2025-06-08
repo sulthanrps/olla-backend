@@ -26,7 +26,6 @@ exports.getDashboardSummary = async (req, res) => {
     }
 
     try {
-        // Query untuk statistik harian/bulanan (untuk grafik)
         const dailyStatsQuery = `
             SELECT 
                 ${dateColumn},
@@ -42,7 +41,6 @@ exports.getDashboardSummary = async (req, res) => {
                 tanggal ASC;
         `;
         
-        // Query untuk total keseluruhan (untuk summary cards), menggunakan WHERE yang sama
         const totalSummaryQuery = `
             SELECT
                 COUNT(t.id_transaction) AS total_transactions,
@@ -54,8 +52,7 @@ exports.getDashboardSummary = async (req, res) => {
             ${whereClause};
         `;
         
-        // Eksekusi kedua query
-        const request = pool.request(); // Cukup satu request
+        const request = pool.request(); 
         const dailyStatsResult = await request.query(dailyStatsQuery);
         const totalSummaryResult = await request.query(totalSummaryQuery);
 

@@ -3,15 +3,15 @@ const router = express.Router();
 
 const customersController = require('../controllers/customers.controller');
 
-router.get('/', customersController.getAllCustomers); // Get all customers
+router.get('/', customersController.getAllCustomers);
 
-router.post('/', customersController.createCustomer); // Create a new customer
+router.post('/', customersController.createCustomer); 
 
-router.get('/:id', customersController.getCustomersById); // Get customer by ID
+router.get('/:id', customersController.getCustomersById); 
 
-router.put('/:id', customersController.updateCustomer); // Update customer by ID
+router.put('/:id', customersController.updateCustomer); 
 
-router.delete('/:id', customersController.deleteCustomer); // Delete customer by ID
+router.delete('/:id', customersController.deleteCustomer);
 
 
-module.exports = router; // Export the router to be used in app.js
+module.exports = router;

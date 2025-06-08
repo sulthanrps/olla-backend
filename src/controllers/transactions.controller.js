@@ -25,10 +25,7 @@ exports.createTransaction = async (req, res) => {
 
     const transaction = new sql.Transaction(pool);
     try {
-        // Memulai transaksi database
         await transaction.begin();
-
-        // --- Langkah 1: Cek stok produk ---
         const productRequest = new sql.Request(transaction);
         productRequest.input('id_product', sql.Int, id_product);
         const productResult = await productRequest.query('SELECT stok FROM products WHERE id_product = @id_product');
@@ -44,7 +41,6 @@ exports.createTransaction = async (req, res) => {
             return res.status(400).json({ status: 'fail', message: `Stok produk tidak mencukupi. Sisa stok: ${currentStock}` });
         }
 
-        // --- Langkah 2: Masukkan data ke tabel transactions ---
         const today = new Date();
         const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
         const namaHari = days[today.getDay()];
@@ -65,19 +61,16 @@ exports.createTransaction = async (req, res) => {
              VALUES (@hari, @tanggal, @id_customer, @id_product, @size, @warna, @jenis_transaksi, @qty, @id_kasir)`
         );
 
-        // --- Langkah 3: Kurangi stok di tabel products ---
         const updateStockRequest = new sql.Request(transaction);
         updateStockRequest.input('qty', sql.Int, qty);
         updateStockRequest.input('id_product', sql.Int, id_product);
         await updateStockRequest.query('UPDATE products SET stok = stok - @qty WHERE id_product = @id_product');
 
-        // Jika semua berhasil, commit transaksi
         await transaction.commit();
 
         res.status(201).json({ status: 'success', message: 'Transaksi berhasil dibuat' });
 
     } catch (error) {
-        // Jika ada error di salah satu langkah, batalkan semua perubahan (rollback)
         await transaction.rollback();
         res.status(500).json({ status: 'error', message: `Server Error: ${error.message}` });
     }

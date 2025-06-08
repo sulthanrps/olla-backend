@@ -2,7 +2,6 @@ const { pool, sql } = require('../config/db');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-// SIGN UP / REGISTER: Membuat user baru
 exports.register = async (req, res) => {
     const { username, password, nama } = req.body;
 
@@ -26,7 +25,7 @@ exports.register = async (req, res) => {
             message: 'Registrasi berhasil. Silakan login.',
         });
     } catch (error) {
-        if (error.number === 2627) { // Unique constraint violation
+        if (error.number === 2627) {
             return res.status(409).json({ status: 'fail', message: 'Username sudah digunakan.' });
         }
         res.status(500).json({ status: 'error', message: `Server Error: ${error.message}` });
